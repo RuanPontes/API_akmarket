@@ -1,5 +1,6 @@
-package com.example.testegpt;
+package com.example.testegpt.repository;
 
+import com.example.testegpt.domain.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {

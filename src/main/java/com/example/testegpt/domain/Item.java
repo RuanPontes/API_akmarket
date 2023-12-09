@@ -1,4 +1,4 @@
-package com.example.testegpt;
+package com.example.testegpt.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

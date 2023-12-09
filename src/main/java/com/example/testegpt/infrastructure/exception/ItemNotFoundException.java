@@ -1,4 +1,4 @@
-package com.example.testegpt;
+package com.example.testegpt.infrastructure.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
