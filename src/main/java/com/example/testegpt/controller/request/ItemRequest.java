@@ -8,16 +8,10 @@ public record ItemRequest(
     @NotBlank(message = "não pode ser vazio") String nome,
     @NotNull(message = "não pode ser vazio") Double valor,
     @NotBlank(message = "não pode ser vazio") String tipo,
-    @NotBlank(message = "não pode ser vazio")  String adds,
+    @NotBlank(message = "não pode ser vazio") String adds,
     @NotBlank(message = "não pode ser vazio") String classe) {
 
   public Item toItem() {
-    return Item.builder()
-        .nome(nome)
-        .valor(valor)
-        .tipo(tipo)
-        .classe(classe)
-        .build();
+    return Item.builder().nome(nome).valor(valor).tipo(tipo).classe(classe).build();
   }
-
 }

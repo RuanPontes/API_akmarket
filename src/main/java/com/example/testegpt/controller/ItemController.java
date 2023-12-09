@@ -17,34 +17,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/itens")
 public class ItemController {
 
-    private final ItemService itemService;
-    ItemController(final ItemService itemService) {
-        this.itemService = itemService;
-    }
+  private final ItemService itemService;
 
-    @GetMapping
-    public ResponseEntity<Page<ItemResponse>> findAll(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "3") int size) {
+  ItemController(final ItemService itemService) {
+    this.itemService = itemService;
+  }
 
-        List<ItemResponse> itens = itemService
-            .findItens(PageRequest.of(page, size))
-            .stream()
-            .map(ItemResponse::new)
-            .toList();
+  @GetMapping
+  public ResponseEntity<Page<ItemResponse>> findAll(
+      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+    List<ItemResponse> itens =
+        itemService.findItens(PageRequest.of(page, size)).stream().map(ItemResponse::new).toList();
 
-        return ResponseEntity.ok(new PageImpl<>(itens));
-    }
+    return ResponseEntity.ok(new PageImpl<>(itens));
+  }
 
-    @PostMapping
-    public ResponseEntity<ItemResponse> create(@RequestBody @Valid ItemRequest request) {
-        Item item = itemService.save(request.toItem());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ItemResponse(item));
-    }
+  @PostMapping
+  public ResponseEntity<ItemResponse> create(@RequestBody @Valid ItemRequest request) {
+    Item item = itemService.save(request.toItem());
+    return ResponseEntity.status(HttpStatus.CREATED).body(new ItemResponse(item));
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        itemService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> delete(@PathVariable Long id) {
+    itemService.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }
