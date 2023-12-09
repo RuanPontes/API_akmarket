@@ -22,12 +22,13 @@ public class ItemController {
         return ResponseEntity.ok(itens);
     }
 
-
-
     @PostMapping
     public Item newItem(@RequestBody Item newItem) {
         return repository.save(newItem);
     }
 
-
+    @DeleteMapping("/{id}")
+    public void deleteItem(@PathVariable Long id) {
+        repository.deleteById(id);
+    }
 }
