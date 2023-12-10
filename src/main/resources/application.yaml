@@ -11,6 +11,6 @@ spring:
 
 akmarket:
   app:
-    jwt-cookie-name: ak-market
-    jwt-secret: itCanBeASecretValue
-    jwt-expiration-ms: 86400000
+    jwt:
+      secret: itCanBeASecretValue
+      issuer: akmarket
