@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +25,7 @@ public class ItemController {
   }
 
   @GetMapping
+  @PreAuthorize("hasRole('USER_ROLE')")
   public ResponseEntity<Page<ItemResponse>> findAll(
       @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
     List<ItemResponse> itens =
@@ -33,6 +35,7 @@ public class ItemController {
   }
 
   @PostMapping
+  @PreAuthorize("hasRole('USER_ROLE')")
   public ResponseEntity<ItemResponse> create(@RequestBody @Valid ItemRequest request) {
     Item item = itemService.save(request.toItem());
     return ResponseEntity.status(HttpStatus.CREATED).body(new ItemResponse(item));

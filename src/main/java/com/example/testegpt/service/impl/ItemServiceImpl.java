@@ -18,12 +18,6 @@ public class ItemServiceImpl implements ItemService {
   }
 
   public Item save(final Item item) {
-    Item itemSearched = findById(item.getId());
-
-    if (Objects.isNull(itemSearched)) {
-      throw new RuntimeException("Item already saved");
-    }
-
     return itemRepository.save(item);
   }
 

@@ -14,3 +14,7 @@ akmarket:
     jwt:
       secret: itCanBeASecretValue
       issuer: akmarket
+
+server:
+  tomcat:
+    connection-timeout: 10000
