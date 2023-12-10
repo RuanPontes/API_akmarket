@@ -1,38 +1,36 @@
 package com.example.testegpt.domain;
 
+import com.example.testegpt.domain.enums.Roles;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
+@Table(name = "roles")
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Builder
-@Table(name = "itens")
-public class Item {
+public class Role {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
-  private String nome;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, unique = true)
+  private Roles nome;
 
-  @Column(nullable = false)
-  private Double valor;
-
-  @Column(nullable = false)
-  private String tipo; // novo campo
-
-  private String adds; // novo campo
-
-  @Column(nullable = false)
-  private String classe; // novo campo
+  @ManyToMany(mappedBy = "roles")
+  private List<User> usuarios;
 }
