@@ -17,6 +17,6 @@ public class AutenticacaoServiceImpl implements AutenticacaoService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return (UserDetails) userRepository.findByUsuario(username);
+    return userRepository.findByUsuario(username);
   }
 }
