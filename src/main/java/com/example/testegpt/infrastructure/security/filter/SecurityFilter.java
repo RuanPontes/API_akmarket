@@ -48,7 +48,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     String jwtToken = request.getHeader(AUTHORIZATION);
 
     if (Objects.nonNull(jwtToken)) {
-      return jwtToken.replace("Bearer ", "");
+      return jwtToken.replace("Bearer ", "").trim();
     }
 
     return null;

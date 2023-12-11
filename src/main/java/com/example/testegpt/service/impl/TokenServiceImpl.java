@@ -31,7 +31,7 @@ public class TokenServiceImpl implements TokenService {
           .withIssuer(issuer)
           .withSubject(user.getUsuario())
           .withExpiresAt(getDataExpiracao())
-          .sign(getAlgorithm(secret));
+          .sign(Algorithm.HMAC256(secret));
     } catch (JWTCreationException exception) {
       throw new RuntimeException("Erro ao gerar token JWT", exception);
     }
@@ -40,22 +40,18 @@ public class TokenServiceImpl implements TokenService {
   @Override
   public String getSubject(String jwtToken) {
     try {
-     return JWT.require(getAlgorithm(secret))
-          .withIssuer(issuer)
+     return JWT.require(Algorithm.HMAC256(secret))
+         .withIssuer(issuer)
          .build()
          .verify(jwtToken)
          .getSubject();
-    } catch (JWTVerificationException exception){
-      throw new RuntimeException("Token inválido!");
+    } catch (JWTVerificationException exception) {
+       throw new RuntimeException("Token inválido! " + exception);
     }
   }
 
   private Instant getDataExpiracao() {
     return LocalDateTime.now().plusHours(HOURS).toInstant(ZoneOffset.of(UTC_OFFSET));
-  }
-
-  private Algorithm getAlgorithm(String secret) {
-    return Algorithm.HMAC256(secret);
   }
 
 }

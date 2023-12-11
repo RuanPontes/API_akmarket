@@ -12,7 +12,7 @@ spring:
 akmarket:
   app:
     jwt:
-      secret: itCanBeASecretValue
+      secret: aXRDYW5CZUFTZWNyZXRWYWx1ZQ==
       issuer: akmarket
 
 server:
