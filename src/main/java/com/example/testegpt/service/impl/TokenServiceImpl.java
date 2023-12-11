@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.testegpt.domain.User;
+import com.example.testegpt.infrastructure.TokenException;
 import com.example.testegpt.service.TokenService;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -33,7 +34,7 @@ public class TokenServiceImpl implements TokenService {
           .withExpiresAt(getDataExpiracao())
           .sign(Algorithm.HMAC256(secret));
     } catch (JWTCreationException exception) {
-      throw new RuntimeException("Erro ao gerar token JWT", exception);
+      throw new TokenException("Erro ao gerar token JWT", exception);
     }
   }
 
@@ -46,7 +47,7 @@ public class TokenServiceImpl implements TokenService {
          .verify(jwtToken)
          .getSubject();
     } catch (JWTVerificationException exception) {
-       throw new RuntimeException("Token inválido! " + exception);
+       throw new TokenException("Não foi possível validar o token", exception);
     }
   }
 

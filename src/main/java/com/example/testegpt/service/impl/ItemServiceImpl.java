@@ -1,6 +1,7 @@
 package com.example.testegpt.service.impl;
 
 import com.example.testegpt.domain.Item;
+import com.example.testegpt.infrastructure.exception.EntityNotFoundException;
 import com.example.testegpt.repository.ItemRepository;
 import com.example.testegpt.service.ItemService;
 import java.util.Objects;
@@ -26,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
     Item item = findById(id);
 
     if (Objects.isNull(item)) {
-      throw new RuntimeException("Item not found!");
+      throw new EntityNotFoundException("Item %s não encontrado".formatted(id));
     }
 
     itemRepository.delete(item);
