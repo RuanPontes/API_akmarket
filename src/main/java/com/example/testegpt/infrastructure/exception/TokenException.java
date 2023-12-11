@@ -1,4 +1,4 @@
-package com.example.testegpt.infrastructure;
+package com.example.testegpt.infrastructure.exception;
 
 public class TokenException extends RuntimeException {
 

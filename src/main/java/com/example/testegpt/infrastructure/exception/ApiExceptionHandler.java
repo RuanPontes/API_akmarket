@@ -1,6 +1,5 @@
 package com.example.testegpt.infrastructure.exception;
 
-import com.example.testegpt.infrastructure.TokenException;
 import com.example.testegpt.infrastructure.exception.response.ErroCampo;
 import com.example.testegpt.infrastructure.exception.response.ErroCampoResponse;
 import com.example.testegpt.infrastructure.exception.response.ErroResponse;

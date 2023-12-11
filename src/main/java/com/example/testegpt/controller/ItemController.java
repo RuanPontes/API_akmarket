@@ -27,7 +27,6 @@ public class ItemController {
   }
 
   @GetMapping
-  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
   public ResponseEntity<Page<ItemResponse>> findAll(
       @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
     List<ItemResponse> itens =

@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.testegpt.domain.User;
-import com.example.testegpt.infrastructure.TokenException;
+import com.example.testegpt.infrastructure.exception.TokenException;
 import com.example.testegpt.service.TokenService;
 import java.time.Instant;
 import java.time.LocalDateTime;
