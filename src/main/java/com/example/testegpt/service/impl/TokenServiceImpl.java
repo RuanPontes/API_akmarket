@@ -44,7 +44,7 @@ public class TokenServiceImpl implements TokenService {
      return JWT.require(Algorithm.HMAC256(secret))
          .withIssuer(issuer)
          .build()
-         .verify(jwtToken)
+         .verify(removeBearer(jwtToken))
          .getSubject();
     } catch (JWTVerificationException exception) {
        throw new TokenException("Não foi possível validar o token", exception);
@@ -53,6 +53,10 @@ public class TokenServiceImpl implements TokenService {
 
   private Instant getDataExpiracao() {
     return LocalDateTime.now().plusHours(HOURS).toInstant(ZoneOffset.of(UTC_OFFSET));
+  }
+
+  private String removeBearer(String token) {
+    return token.replace("Bearer ", "").trim();
   }
 
 }

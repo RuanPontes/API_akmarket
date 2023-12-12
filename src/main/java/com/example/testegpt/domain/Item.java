@@ -6,15 +6,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 @Table(name = "itens")
 public class Item {
@@ -29,10 +32,19 @@ public class Item {
   private Double valor;
 
   @Column(nullable = false)
-  private String tipo; // novo campo
+  private String tipo;
 
-  private String adds; // novo campo
+  private String adds;
 
   @Column(nullable = false)
-  private String classe; // novo campo
+  private String classe;
+
+  @Column(name = "user_id")
+  private Long idUsuario;
+
+  @Column(name = "data_criacao")
+  private LocalDateTime dataCriacao;
+
+  @Column(name = "data_atualizacao")
+  private LocalDateTime dataAtualizacao;
 }

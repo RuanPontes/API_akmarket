@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +46,15 @@ public class User implements UserDetails {
   private String email;
 
   private String telefone;
-  private Boolean habilitado = false;
+
+  @Column(name = "is_habilitado")
+  private Boolean isHabilitado = false;
+
+  @Column(name = "data_criacao")
+  private LocalDateTime dataCriacao;
+
+  @Column(name = "data_atualizacao")
+  private LocalDateTime dataAtualizacao;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(
@@ -86,6 +95,6 @@ public class User implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return habilitado;
+    return isHabilitado;
   }
 }

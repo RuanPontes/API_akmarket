@@ -1,5 +1,6 @@
 package com.example.testegpt.infrastructure.security.filter;
 
+import com.example.testegpt.constants.Headers;
 import com.example.testegpt.domain.User;
 import com.example.testegpt.repository.UserRepository;
 import com.example.testegpt.service.TokenService;
@@ -17,8 +18,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-  private static final String AUTHORIZATION = "Authorization";
-
   private final TokenService tokenService;
   private final UserRepository userRepository;
 
@@ -31,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    String token = recuperarToken(request);
+    String token = request.getHeader(Headers.AUTHORIZATION);
 
     if (Objects.nonNull(token)) {
       String subject = tokenService.getSubject(token);
@@ -44,13 +43,4 @@ public class SecurityFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
-  private String recuperarToken(HttpServletRequest request) {
-    String jwtToken = request.getHeader(AUTHORIZATION);
-
-    if (Objects.nonNull(jwtToken)) {
-      return jwtToken.replace("Bearer ", "").trim();
-    }
-
-    return null;
-  }
 }

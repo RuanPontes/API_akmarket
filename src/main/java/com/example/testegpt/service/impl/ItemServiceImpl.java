@@ -1,9 +1,13 @@
 package com.example.testegpt.service.impl;
 
 import com.example.testegpt.domain.Item;
+import com.example.testegpt.domain.User;
 import com.example.testegpt.infrastructure.exception.EntityNotFoundException;
 import com.example.testegpt.repository.ItemRepository;
 import com.example.testegpt.service.ItemService;
+import com.example.testegpt.service.TokenService;
+import com.example.testegpt.service.UserService;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,13 +17,29 @@ import org.springframework.stereotype.Service;
 public class ItemServiceImpl implements ItemService {
 
   private final ItemRepository itemRepository;
+  private final TokenService tokenService;
+  private final UserService userService;
 
-  public ItemServiceImpl(ItemRepository itemRepository) {
+  public ItemServiceImpl(
+      ItemRepository itemRepository, TokenService tokenService, UserService userService) {
     this.itemRepository = itemRepository;
+    this.tokenService = tokenService;
+    this.userService = userService;
   }
 
   public Item save(final Item item) {
     return itemRepository.save(item);
+  }
+
+  public Item save(final String token, final Item item) {
+    String subject = tokenService.getSubject(token);
+    User user = userService.findByUsuario(subject);
+
+    item.setIdUsuario(user.getId());
+    item.setDataCriacao(LocalDateTime.now());
+    item.setDataAtualizacao(LocalDateTime.now());
+
+    return save(item);
   }
 
   @Override
