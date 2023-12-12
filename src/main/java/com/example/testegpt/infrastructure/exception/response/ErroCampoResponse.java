@@ -12,8 +12,8 @@ public class ErroCampoResponse extends ErroResponse {
 
   private List<ErroCampo> erros;
 
-  public ErroCampoResponse(String mensagem, String timestamp, List<ErroCampo> erros) {
-    super(mensagem, timestamp);
+  public ErroCampoResponse(String mensagem, List<ErroCampo> erros) {
+    super(mensagem);
     this.erros = erros;
   }
 

@@ -48,7 +48,7 @@ public class User implements UserDetails {
   private String telefone;
 
   @Column(name = "is_habilitado")
-  private Boolean isHabilitado = false;
+  private Boolean isHabilitado;
 
   @Column(name = "data_criacao")
   private LocalDateTime dataCriacao;

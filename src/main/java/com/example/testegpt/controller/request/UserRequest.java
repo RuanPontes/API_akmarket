@@ -20,6 +20,7 @@ public record UserRequest(
         .senha(senha)
         .email(email)
         .telefone(telefone)
+        .isHabilitado(false)
         .dataCriacao(LocalDateTime.now())
         .dataAtualizacao(LocalDateTime.now())
         .build();
