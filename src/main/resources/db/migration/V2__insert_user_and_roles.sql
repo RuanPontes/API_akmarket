@@ -1,5 +1,5 @@
-INSERT INTO users (id, usuario, senha, email, telefone, is_habilitado, data_criacao, data_atualizacao)
-VALUES (1, 'admin', '$2a$10$dD39J/vyB6Lsn9GiVhXytOQUQu7ojItGqJAfuwQyyIPkoHUYin9Fi', 'email@email.com', null, true, NOW(), NOW());
+INSERT INTO users (id, usuario, senha, email, telefone, is_habilitado, data_criacao, data_atualizacao, pode_negociar)
+VALUES (1, 'admin', '$2a$10$dD39J/vyB6Lsn9GiVhXytOQUQu7ojItGqJAfuwQyyIPkoHUYin9Fi', 'email@email.com', null, true, NOW(), NOW(), true);
 
 INSERT INTO roles (id, nome) VALUES (1, 'ROLE_USER');
 INSERT INTO roles (id, nome) VALUES (2, 'ROLE_ADMIN');

@@ -3,6 +3,7 @@ package com.example.testegpt.service.impl;
 import com.example.testegpt.domain.Role;
 import com.example.testegpt.domain.User;
 import com.example.testegpt.domain.enums.Roles;
+import com.example.testegpt.infrastructure.exception.EntityNotFoundException;
 import com.example.testegpt.infrastructure.exception.UserAlreadyExistsException;
 import com.example.testegpt.repository.UserRepository;
 import com.example.testegpt.service.RoleService;
@@ -18,8 +19,8 @@ public class UserServiceImpl implements UserService {
   private final RoleService roleService;
   private final PasswordEncoder passwordEncoder;
 
-  public UserServiceImpl(UserRepository userRepository, RoleService roleService,
-      PasswordEncoder passwordEncoder) {
+  public UserServiceImpl(
+      UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.roleService = roleService;
     this.passwordEncoder = passwordEncoder;
@@ -38,7 +39,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public User save(User user) {
     if (userAlreadyExists(user)) {
-      throw new UserAlreadyExistsException("Já existe um usuário cadastrado com o email ou username");
+      throw new UserAlreadyExistsException(
+          "Já existe um usuário cadastrado com o email ou username");
     }
 
     Role role = roleService.findRoleByName(Roles.ROLE_USER);
@@ -48,8 +50,20 @@ public class UserServiceImpl implements UserService {
     return userRepository.save(user);
   }
 
+  @Override
+  public User update(User user) {
+    return userRepository.save(user);
+  }
+
+  @Override
+  public User findById(Long id) {
+    return userRepository
+        .findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
+  }
+
   public boolean userAlreadyExists(User user) {
-    return Objects.nonNull(findByEmail(user.getEmail())) || Objects.nonNull(
-        findByUsuario(user.getUsuario()));
+    return Objects.nonNull(findByEmail(user.getEmail()))
+        || Objects.nonNull(findByUsuario(user.getUsuario()));
   }
 }

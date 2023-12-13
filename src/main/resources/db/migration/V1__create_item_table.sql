@@ -7,6 +7,7 @@ CREATE TABLE users (
     is_habilitado BOOLEAN NOT NULL,
     data_criacao DATETIME NOT NULL,
     data_atualizacao DATETIME NOT NULL,
+    pode_negociar BOOLEAN NOT NULL,
 
     PRIMARY KEY (id),
     CONSTRAINT unique_users UNIQUE (usuario, email)
@@ -50,6 +51,7 @@ CREATE TABLE validation_codes(
     data_validade TIMESTAMP NOT NULL,
     is_validado BOOLEAN NOT NULL,
     user_id INT NOT NULL,
+    data_validacao TIMESTAMP,
 
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)

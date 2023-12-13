@@ -56,6 +56,9 @@ public class User implements UserDetails {
   @Column(name = "data_atualizacao")
   private LocalDateTime dataAtualizacao;
 
+  @Column(name = "pode_negociar")
+  private Boolean podeNegociar;
+
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(
       name = "user_roles",

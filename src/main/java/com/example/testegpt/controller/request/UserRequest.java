@@ -20,9 +20,10 @@ public record UserRequest(
         .senha(senha)
         .email(email)
         .telefone(telefone)
-        .isHabilitado(false)
+        .isHabilitado(true)
         .dataCriacao(LocalDateTime.now())
         .dataAtualizacao(LocalDateTime.now())
+        .podeNegociar(false)
         .build();
   }
 }

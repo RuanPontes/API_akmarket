@@ -20,29 +20,38 @@ public class ApiExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErroResponse> handleFieldErrors(MethodArgumentNotValidException exception) {
     List<ErroCampo> erros = exception.getFieldErrors().stream().map(ErroCampo::new).toList();
+    logger.error(exception.getLocalizedMessage(), exception.getCause());
+
     return ResponseEntity.badRequest()
         .body(new ErroCampoResponse(ExceptionConstantes.FIELD_ERROR_MESSAGE, erros));
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
   public ResponseEntity<ErroResponse> handleEntityNotFound(EntityNotFoundException exception) {
+    logger.error(exception.getLocalizedMessage(), exception.getCause());
+
     return ResponseEntity.badRequest().body(new ErroResponse(exception));
   }
 
   @ExceptionHandler(TokenException.class)
   public ResponseEntity<ErroResponse> handleTokenErrors(TokenException exception) {
+    logger.error(exception.getLocalizedMessage(), exception.getCause());
+
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErroResponse(exception));
   }
 
   @ExceptionHandler(UserAlreadyExistsException.class)
   public ResponseEntity<ErroResponse> handleUserAlreadyExistsError(
       UserAlreadyExistsException exception) {
+    logger.error(exception.getLocalizedMessage(), exception.getCause());
+
     return ResponseEntity.badRequest().body(new ErroResponse(exception));
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErroResponse> handleException(Exception exception) {
     logger.error(exception.getLocalizedMessage(), exception.getCause());
+
     return ResponseEntity.internalServerError().body(new ErroResponse(ExceptionConstantes.GENERIC_ERROR));
   }
 }
