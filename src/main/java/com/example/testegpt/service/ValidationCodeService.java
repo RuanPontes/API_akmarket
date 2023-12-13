@@ -10,4 +10,6 @@ public interface ValidationCodeService {
 
   ValidationCode validate(Long userId, Integer codigo);
 
+  void verify(String token);
+
 }

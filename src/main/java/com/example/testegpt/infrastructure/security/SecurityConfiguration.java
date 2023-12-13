@@ -1,9 +1,9 @@
 package com.example.testegpt.infrastructure.security;
 
 import com.example.testegpt.infrastructure.security.filter.SecurityFilter;
-import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -27,6 +27,7 @@ public class SecurityConfiguration {
 
   private final SecurityFilter securityFilter;
 
+  @Lazy
   public SecurityConfiguration(SecurityFilter securityFilter) {
     this.securityFilter = securityFilter;
   }

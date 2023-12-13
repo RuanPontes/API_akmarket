@@ -4,9 +4,10 @@ import com.example.testegpt.domain.Role;
 import com.example.testegpt.domain.User;
 import com.example.testegpt.domain.enums.Roles;
 import com.example.testegpt.infrastructure.exception.EntityNotFoundException;
-import com.example.testegpt.infrastructure.exception.UserAlreadyExistsException;
+import com.example.testegpt.infrastructure.exception.EntityAlreadyExistsException;
 import com.example.testegpt.repository.UserRepository;
 import com.example.testegpt.service.RoleService;
+import com.example.testegpt.service.TokenService;
 import com.example.testegpt.service.UserService;
 import java.util.Collections;
 import java.util.Objects;
@@ -18,12 +19,14 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final RoleService roleService;
   private final PasswordEncoder passwordEncoder;
+  private final TokenService tokenService;
 
-  public UserServiceImpl(
-      UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
+  public UserServiceImpl(UserRepository userRepository, RoleService roleService,
+      PasswordEncoder passwordEncoder, TokenService tokenService) {
     this.userRepository = userRepository;
     this.roleService = roleService;
     this.passwordEncoder = passwordEncoder;
+    this.tokenService = tokenService;
   }
 
   @Override
@@ -39,7 +42,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public User save(User user) {
     if (userAlreadyExists(user)) {
-      throw new UserAlreadyExistsException(
+      throw new EntityAlreadyExistsException(
           "Já existe um usuário cadastrado com o email ou username");
     }
 
@@ -60,6 +63,12 @@ public class UserServiceImpl implements UserService {
     return userRepository
         .findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
+  }
+
+  @Override
+  public User findByToken(String token) {
+    String subject = tokenService.getSubject(token);
+    return findByUsuario(subject);
   }
 
   public boolean userAlreadyExists(User user) {

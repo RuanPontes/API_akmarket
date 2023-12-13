@@ -40,18 +40,26 @@ public class ApiExceptionHandler {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErroResponse(exception));
   }
 
-  @ExceptionHandler(UserAlreadyExistsException.class)
-  public ResponseEntity<ErroResponse> handleUserAlreadyExistsError(
-      UserAlreadyExistsException exception) {
+  @ExceptionHandler(EntityAlreadyExistsException.class)
+  public ResponseEntity<ErroResponse> handleEntityAlreadyExists(
+      EntityAlreadyExistsException exception) {
     logger.error(exception.getLocalizedMessage(), exception.getCause());
 
     return ResponseEntity.badRequest().body(new ErroResponse(exception));
   }
 
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<ErroResponse> handleException(Exception exception) {
+  @ExceptionHandler(UserNotValitatedException.class)
+  public ResponseEntity<ErroResponse> handleGenericApiException(UserNotValitatedException exception) {
     logger.error(exception.getLocalizedMessage(), exception.getCause());
 
-    return ResponseEntity.internalServerError().body(new ErroResponse(ExceptionConstantes.GENERIC_ERROR));
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErroResponse(exception));
   }
+
+//  @ExceptionHandler(Exception.class)
+//  public ResponseEntity<ErroResponse> handleException(Exception exception) {
+//    logger.error(exception.getLocalizedMessage(), exception.getCause());
+//
+//    return ResponseEntity.internalServerError().body(new ErroResponse(ExceptionConstantes.GENERIC_ERROR));
+//  }
+
 }

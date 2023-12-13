@@ -2,14 +2,15 @@ package com.example.testegpt.infrastructure.security.filter;
 
 import com.example.testegpt.constants.Headers;
 import com.example.testegpt.domain.User;
-import com.example.testegpt.repository.UserRepository;
-import com.example.testegpt.service.TokenService;
+import com.example.testegpt.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,13 +18,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
+  private final UserService userService;
 
-  private final TokenService tokenService;
-  private final UserRepository userRepository;
-
-  public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
-    this.tokenService = tokenService;
-    this.userRepository = userRepository;
+  @Lazy
+  public SecurityFilter(UserService userService) {
+    this.userService = userService;
   }
 
   @Override
@@ -33,8 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     String token = request.getHeader(Headers.AUTHORIZATION);
 
     if (Objects.nonNull(token)) {
-      String subject = tokenService.getSubject(token);
-      User user = userRepository.findByUsuario(subject);
+      User user = userService.findByToken(token);
 
       var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(authentication);

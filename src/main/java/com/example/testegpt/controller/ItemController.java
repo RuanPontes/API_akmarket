@@ -45,14 +45,12 @@ public class ItemController {
   }
 
   @PostMapping
-  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
   public ResponseEntity<ItemResponse> create(@RequestBody @Valid ItemRequest request, HttpServletRequest servletRequest) {
     Item item = itemService.save(servletRequest.getHeader("Authorization"), request.toItem());
     return ResponseEntity.status(HttpStatus.CREATED).body(new ItemResponse(item));
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> delete(@PathVariable Long id) {
     itemService.delete(id);
     return ResponseEntity.noContent().build();

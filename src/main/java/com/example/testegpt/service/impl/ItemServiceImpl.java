@@ -5,8 +5,8 @@ import com.example.testegpt.domain.User;
 import com.example.testegpt.infrastructure.exception.EntityNotFoundException;
 import com.example.testegpt.repository.ItemRepository;
 import com.example.testegpt.service.ItemService;
-import com.example.testegpt.service.TokenService;
 import com.example.testegpt.service.UserService;
+import com.example.testegpt.service.ValidationCodeService;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import org.springframework.data.domain.Page;
@@ -17,14 +17,14 @@ import org.springframework.stereotype.Service;
 public class ItemServiceImpl implements ItemService {
 
   private final ItemRepository itemRepository;
-  private final TokenService tokenService;
   private final UserService userService;
+  private final ValidationCodeService validationCodeService;
 
   public ItemServiceImpl(
-      ItemRepository itemRepository, TokenService tokenService, UserService userService) {
+      ItemRepository itemRepository, UserService userService, ValidationCodeService validationCodeService) {
     this.itemRepository = itemRepository;
-    this.tokenService = tokenService;
     this.userService = userService;
+    this.validationCodeService = validationCodeService;
   }
 
   public Item save(final Item item) {
@@ -32,8 +32,8 @@ public class ItemServiceImpl implements ItemService {
   }
 
   public Item save(final String token, final Item item) {
-    String subject = tokenService.getSubject(token);
-    User user = userService.findByUsuario(subject);
+    User user = userService.findByToken(token);
+    validationCodeService.verify(token);
 
     item.setIdUsuario(user.getId());
     item.setDataCriacao(LocalDateTime.now());

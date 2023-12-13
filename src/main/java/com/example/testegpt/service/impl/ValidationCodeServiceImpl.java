@@ -2,6 +2,7 @@ package com.example.testegpt.service.impl;
 
 import com.example.testegpt.domain.User;
 import com.example.testegpt.domain.ValidationCode;
+import com.example.testegpt.infrastructure.exception.UserNotValitatedException;
 import com.example.testegpt.repository.ValidationCodeRepository;
 import com.example.testegpt.service.UserService;
 import com.example.testegpt.service.ValidationCodeService;
@@ -45,7 +46,7 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
   @Override
   public ValidationCode validate(Long userId, Integer codigo) {
     User user = userService.findById(userId);
-    ValidationCode code = validationCodeRepository.findByUserId(user.getId());
+    ValidationCode code = getValidationCode(user.getId());
 
     if (!isValid(codigo, code)) {
       throw new RuntimeException("Código inválido ou expirado!");
@@ -59,6 +60,20 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
     userService.update(user);
 
     return code;
+  }
+
+  @Override
+  public void verify(String token) {
+    User user = userService.findByToken(token);
+    ValidationCode code = getValidationCode(user.getId());
+
+    if (!code.getIsValidado()) {
+      throw new UserNotValitatedException("O código não foi validado, valide para continuar");
+    }
+  }
+
+  private ValidationCode getValidationCode(Long id) {
+    return validationCodeRepository.findByUserId(id);
   }
 
   private LocalDateTime getExpirationTime() {
