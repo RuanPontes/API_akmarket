@@ -28,4 +28,11 @@ public class ValidateUserController {
 
     return ResponseEntity.ok(new UserValidationResponse("Código validado com sucesso!"));
   }
+
+  @PostMapping("/{id}/resend")
+  public ResponseEntity<UserValidationResponse> resend(@PathVariable Long id) {
+    validationCodeService.resend(id);
+    return ResponseEntity.ok(new UserValidationResponse("O código foi reenviado"));
+  }
+
 }

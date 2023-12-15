@@ -3,14 +3,14 @@ CREATE TABLE users (
     usuario VARCHAR(255) NOT NULL,
     senha VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    telefone VARCHAR(13),
+    telefone VARCHAR(13) NOT NULL,
     is_habilitado BOOLEAN NOT NULL,
     data_criacao DATETIME NOT NULL,
     data_atualizacao DATETIME NOT NULL,
     pode_negociar BOOLEAN NOT NULL,
 
     PRIMARY KEY (id),
-    CONSTRAINT unique_users UNIQUE (usuario, email)
+    CONSTRAINT unique_users UNIQUE (usuario, email, telefone)
 );
 
 CREATE TABLE roles (

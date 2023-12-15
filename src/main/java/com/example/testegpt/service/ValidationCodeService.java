@@ -12,4 +12,6 @@ public interface ValidationCodeService {
 
   void verify(String token);
 
+  void resend(Long userId);
+
 }

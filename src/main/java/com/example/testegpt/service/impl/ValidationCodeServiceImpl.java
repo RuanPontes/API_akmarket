@@ -34,7 +34,7 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
   public ValidationCode create(Long userId) {
     ValidationCode code =
         ValidationCode.builder()
-            .codigo(ThreadLocalRandom.current().nextInt(100000, 1000000))
+            .codigo(generateCode())
             .dataValidade(getExpirationTime())
             .userId(userId)
             .isValidado(false)
@@ -72,6 +72,19 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
     }
   }
 
+  @Override
+  public void resend(Long userId) {
+    ValidationCode code = validationCodeRepository.findByUserId(userId);
+
+    if (code.getIsValidado()) {
+      throw new RuntimeException("Usuário já validado!");
+    }
+
+    code.setCodigo(generateCode());
+    code.setDataValidade(getExpirationTime());
+    validationCodeRepository.save(code);
+  }
+
   private ValidationCode getValidationCode(Long id) {
     return validationCodeRepository.findByUserId(id);
   }
@@ -91,4 +104,9 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
     return Objects.equals(code, validationCode.getCodigo())
         && getCurrentLocalDateTime().isBefore(validationCode.getDataValidade());
   }
+
+  private Integer generateCode() {
+    return ThreadLocalRandom.current().nextInt(100000, 1000000);
+  }
+
 }
