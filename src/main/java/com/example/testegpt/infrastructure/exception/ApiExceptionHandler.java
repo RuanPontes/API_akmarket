@@ -48,18 +48,19 @@ public class ApiExceptionHandler {
     return ResponseEntity.badRequest().body(new ErroResponse(exception));
   }
 
-  @ExceptionHandler(UserNotValitatedException.class)
-  public ResponseEntity<ErroResponse> handleGenericApiException(UserNotValitatedException exception) {
+  @ExceptionHandler(ValidationCodeException.class)
+  public ResponseEntity<ErroResponse> validationCodeException(
+      ValidationCodeException exception) {
     logger.error(exception.getLocalizedMessage(), exception.getCause());
 
-    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErroResponse(exception));
+    return ResponseEntity.badRequest().body(new ErroResponse(exception));
   }
 
-//  @ExceptionHandler(Exception.class)
-//  public ResponseEntity<ErroResponse> handleException(Exception exception) {
-//    logger.error(exception.getLocalizedMessage(), exception.getCause());
-//
-//    return ResponseEntity.internalServerError().body(new ErroResponse(ExceptionConstantes.GENERIC_ERROR));
-//  }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ErroResponse> handleException(Exception exception) {
+    logger.error(exception.getLocalizedMessage(), exception.getCause());
+
+    return ResponseEntity.internalServerError().body(new ErroResponse(ExceptionConstantes.GENERIC_ERROR));
+  }
 
 }

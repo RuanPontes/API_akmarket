@@ -17,10 +17,11 @@ public class ItemServiceImplTest {
   private final ItemRepository itemRepository = mock(ItemRepository.class);
   private final UserService userService = mock(UserService.class);
   private final ValidationCodeService validationCodeService = mock(ValidationCodeService.class);
+  private final TokenService tokenService = mock(TokenService.class);
 
   @BeforeEach
   void setup() {
-    itemService = new ItemServiceImpl(itemRepository, userService, validationCodeService);
+    itemService = new ItemServiceImpl(itemRepository, userService, validationCodeService, tokenService);
   }
 
   @Test

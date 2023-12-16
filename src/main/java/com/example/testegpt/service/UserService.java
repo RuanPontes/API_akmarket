@@ -14,6 +14,4 @@ public interface UserService {
 
   User findById(Long id);
 
-  User findByToken(String token);
-
 }

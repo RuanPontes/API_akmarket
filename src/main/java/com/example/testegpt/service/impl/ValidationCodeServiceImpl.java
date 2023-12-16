@@ -2,8 +2,9 @@ package com.example.testegpt.service.impl;
 
 import com.example.testegpt.domain.User;
 import com.example.testegpt.domain.ValidationCode;
-import com.example.testegpt.infrastructure.exception.UserNotValitatedException;
+import com.example.testegpt.infrastructure.exception.ValidationCodeException;
 import com.example.testegpt.repository.ValidationCodeRepository;
+import com.example.testegpt.service.TokenService;
 import com.example.testegpt.service.UserService;
 import com.example.testegpt.service.ValidationCodeService;
 import java.time.LocalDateTime;
@@ -17,12 +18,13 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
 
   private final ValidationCodeRepository validationCodeRepository;
   private final UserService userService;
+  private final TokenService tokenService;
 
   public ValidationCodeServiceImpl(
-      ValidationCodeRepository validationCodeRepository,
-      UserService userService) {
+      ValidationCodeRepository validationCodeRepository, UserService userService, TokenService tokenService) {
     this.validationCodeRepository = validationCodeRepository;
     this.userService = userService;
+    this.tokenService = tokenService;
   }
 
   @Override
@@ -49,7 +51,7 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
     ValidationCode code = getValidationCode(user.getId());
 
     if (!isValid(codigo, code)) {
-      throw new RuntimeException("Código inválido ou expirado!");
+      throw new ValidationCodeException("Código inválido ou expirado!");
     }
 
     user.setPodeNegociar(Boolean.TRUE);
@@ -64,11 +66,11 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
 
   @Override
   public void verify(String token) {
-    User user = userService.findByToken(token);
+    User user = userService.findByUsuario(tokenService.getSubject(token));
     ValidationCode code = getValidationCode(user.getId());
 
     if (!code.getIsValidado()) {
-      throw new UserNotValitatedException("O código não foi validado, valide para continuar");
+      throw new ValidationCodeException("O código não foi validado, valide para continuar");
     }
   }
 
@@ -77,7 +79,7 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
     ValidationCode code = validationCodeRepository.findByUserId(userId);
 
     if (code.getIsValidado()) {
-      throw new RuntimeException("Usuário já validado!");
+      throw new ValidationCodeException("Usuário já validado!");
     }
 
     code.setCodigo(generateCode());
@@ -90,10 +92,7 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
   }
 
   private LocalDateTime getExpirationTime() {
-    return LocalDateTime.now()
-        .plusMinutes(5)
-        .atZone(ZoneId.of("-03:00"))
-        .toLocalDateTime();
+    return LocalDateTime.now().plusMinutes(5).atZone(ZoneId.of("-03:00")).toLocalDateTime();
   }
 
   private LocalDateTime getCurrentLocalDateTime() {
@@ -102,11 +101,11 @@ public class ValidationCodeServiceImpl implements ValidationCodeService {
 
   private boolean isValid(Integer code, ValidationCode validationCode) {
     return Objects.equals(code, validationCode.getCodigo())
-        && getCurrentLocalDateTime().isBefore(validationCode.getDataValidade());
+        && getCurrentLocalDateTime().isBefore(validationCode.getDataValidade())
+        && !validationCode.getIsValidado();
   }
 
   private Integer generateCode() {
     return ThreadLocalRandom.current().nextInt(100000, 1000000);
   }
-
 }

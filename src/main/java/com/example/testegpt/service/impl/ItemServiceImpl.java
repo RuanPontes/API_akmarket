@@ -5,6 +5,7 @@ import com.example.testegpt.domain.User;
 import com.example.testegpt.infrastructure.exception.EntityNotFoundException;
 import com.example.testegpt.repository.ItemRepository;
 import com.example.testegpt.service.ItemService;
+import com.example.testegpt.service.TokenService;
 import com.example.testegpt.service.UserService;
 import com.example.testegpt.service.ValidationCodeService;
 import java.time.LocalDateTime;
@@ -19,12 +20,14 @@ public class ItemServiceImpl implements ItemService {
   private final ItemRepository itemRepository;
   private final UserService userService;
   private final ValidationCodeService validationCodeService;
+  private final TokenService tokenService;
 
   public ItemServiceImpl(
-      ItemRepository itemRepository, UserService userService, ValidationCodeService validationCodeService) {
+      ItemRepository itemRepository, UserService userService, ValidationCodeService validationCodeService, TokenService tokenService) {
     this.itemRepository = itemRepository;
     this.userService = userService;
     this.validationCodeService = validationCodeService;
+    this.tokenService = tokenService;
   }
 
   public Item save(final Item item) {
@@ -32,7 +35,7 @@ public class ItemServiceImpl implements ItemService {
   }
 
   public Item save(final String token, final Item item) {
-    User user = userService.findByToken(token);
+    User user = userService.findByUsuario(tokenService.getSubject(token));
     validationCodeService.verify(token);
 
     item.setIdUsuario(user.getId());
@@ -61,5 +64,10 @@ public class ItemServiceImpl implements ItemService {
   @Override
   public Page<Item> findItens(Pageable pageable) {
     return itemRepository.findAll(pageable);
+  }
+
+  @Override
+  public Page<Item> findItensByUserId(Pageable pageable, Long userId) {
+    return itemRepository.findItemsByIdUsuario(pageable, userId);
   }
 }

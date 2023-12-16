@@ -18,6 +18,7 @@ public class TokenServiceImpl implements TokenService {
 
   private static final int HOURS = 2;
   private static final String UTC_OFFSET = "-03:00";
+  private static final String USER_ID = "userId";
 
   @Value("${akmarket.app.jwt.secret}")
   private String secret;
@@ -31,6 +32,7 @@ public class TokenServiceImpl implements TokenService {
       return JWT.create()
           .withIssuer(issuer)
           .withSubject(user.getUsuario())
+          .withClaim(USER_ID, user.getId())
           .withExpiresAt(getDataExpiracao())
           .sign(Algorithm.HMAC256(secret));
     } catch (JWTCreationException exception) {

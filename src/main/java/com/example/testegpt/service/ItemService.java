@@ -16,4 +16,6 @@ public interface ItemService {
 
   Page<Item> findItens(Pageable pageable);
 
+  Page<Item> findItensByUserId(Pageable pageable, Long userId);
+
 }
