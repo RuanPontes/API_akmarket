@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: ${DB_URL:`jdbc:mysql://monorail.proxy.rlwy.net:36813/railway`}
+    username: ${USERNAME:`root`}
+    password: ${PASSWORD:`5ahbF4DC-1fbGE3H11BDF5c41d2AfA5E`}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+akmarket:
+  app:
+    jwt:
+      secret: aXRDYW5CZUFTZWNyZXRWYWx1ZQ==
+      issuer: akmarket
+
+server:
+  tomcat:
+    connection-timeout: 10000
